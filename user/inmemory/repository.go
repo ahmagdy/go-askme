@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/bashmohandes/go-askme/models"
-	"github.com/bashmohandes/go-askme/user"
+	user "github.com/bashmohandes/go-askme/user/types"
 )
 
 type userRepo struct {

@@ -6,10 +6,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bashmohandes/go-askme/answer"
+	answer "github.com/bashmohandes/go-askme/answer/types"
 	"github.com/bashmohandes/go-askme/models"
-	"github.com/bashmohandes/go-askme/question"
-	"github.com/bashmohandes/go-askme/user"
+	question "github.com/bashmohandes/go-askme/question/types"
+	user "github.com/bashmohandes/go-askme/user/types"
 )
 
 type userUsecase struct {

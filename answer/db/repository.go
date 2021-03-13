@@ -1,7 +1,7 @@
 package answer
 
 import (
-	"github.com/bashmohandes/go-askme/answer"
+	answer "github.com/bashmohandes/go-askme/answer/types"
 	"github.com/bashmohandes/go-askme/models"
 	"github.com/bashmohandes/go-askme/web/framework"
 )
