@@ -2,58 +2,48 @@ package main
 
 import (
 	"fmt"
+	"github.com/bashmohandes/go-askme/answer"
+	"github.com/bashmohandes/go-askme/question"
+	"github.com/bashmohandes/go-askme/user"
+	"go.uber.org/fx"
 	"log"
 	"os"
 	"strconv"
 	"time"
 
-	"github.com/bashmohandes/go-askme/answer/db"
 	"github.com/bashmohandes/go-askme/models"
-	"github.com/bashmohandes/go-askme/question/db"
-	userRepo "github.com/bashmohandes/go-askme/user/db"
-	"github.com/bashmohandes/go-askme/user/usecase"
 	"github.com/bashmohandes/go-askme/web/askme"
-	"github.com/bashmohandes/go-askme/web/askme/controllers"
 	"github.com/bashmohandes/go-askme/web/framework"
 	"github.com/gobuffalo/packr"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/joho/godotenv/autoload"
-	"go.uber.org/dig"
 )
 
 func main() {
-	container := dig.New()
-	container.Provide(newConfig)
-	container.Provide(newFileProvider)
-	container.Provide(framework.NewApp)
-	container.Provide(framework.NewRouter)
-	container.Provide(framework.NewRenderer)
-	container.Provide(framework.NewInMemorySessionStore)
-	container.Provide(framework.NewConnection)
-	container.Provide(question.NewRepository)
-	container.Provide(answer.NewRepository)
-	container.Provide(userRepo.NewRepository)
-	container.Provide(user.NewAsksUsecase)
-	container.Provide(user.NewAnswersUsecase)
-	container.Provide(user.NewAuthUsecase)
-	container.Provide(controllers.NewHomeController)
-	container.Provide(controllers.NewProfileController)
-	container.Provide(controllers.NewOktaController)
-	container.Provide(askme.NewApp)
-	err := container.Invoke(func(app *askme.App) {
-		err := migrateDB()
-		if err != nil {
-			log.Fatal(err)
-		}
-		if e := app.Start(); e != nil {
-			log.Fatalln(e)
-		}
-	})
+	app := fx.New(
+		framework.Module,
+		user.Module,
+		question.Module,
+		answer.Module,
+		askme.Module,
+		fx.Provide(newConfig),
+		fx.Provide(newFileProvider),
+		fx.Invoke(invoke),
+		)
 
-	if err != nil {
-		panic(err)
+	if err := app.Err(); err != nil{
+		log.Fatalln(err)
 	}
+
+}
+
+func invoke(config *framework.Config, app *askme.App)error{
+	if err:= migrateDB(config); err != nil{
+		return err
+	}
+
+	return app.Start()
 }
 
 func newFileProvider(config *framework.Config) framework.FileProvider {
@@ -109,9 +99,8 @@ func newConfig() *framework.Config {
 	return config
 }
 
-func migrateDB() error {
+func migrateDB(config *framework.Config) error {
 	log.Print("Auto Migration Starting")
-	config := newConfig()
 	connStr := fmt.Sprintf("postgresql://%s:%s@%s:%d/%s?sslmode=disable", config.PostgresUser, config.PostgresPassword, config.PostgresHost, 5432, config.PostgresDB)
 	db, err := gorm.Open("postgres", connStr)
 	defer db.Close()
