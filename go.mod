@@ -21,6 +21,7 @@ require (
 	github.com/okta/okta-jwt-verifier-golang v1.1.1
 	github.com/rogpeppe/go-internal v1.7.0 // indirect
 	go.uber.org/dig v1.10.0
+	go.uber.org/fx v1.13.1 // indirect
 	golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83
 	google.golang.org/appengine v1.3.0 // indirect
 )
