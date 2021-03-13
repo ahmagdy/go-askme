@@ -1,4 +1,4 @@
-package answer
+package types
 
 import "github.com/bashmohandes/go-askme/models"
 

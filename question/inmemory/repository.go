@@ -2,7 +2,7 @@ package question
 
 import (
 	"github.com/bashmohandes/go-askme/models"
-	"github.com/bashmohandes/go-askme/question"
+	question "github.com/bashmohandes/go-askme/question/types"
 )
 
 // InMemoryQuestionsRepo is a test repo that saves data in memory

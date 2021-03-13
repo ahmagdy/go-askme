@@ -1,4 +1,4 @@
-package user
+package types
 
 import "github.com/bashmohandes/go-askme/models"
 
